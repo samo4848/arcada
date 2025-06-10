@@ -22,7 +22,6 @@ export function EditorRoot() {
         
         // On first render create our application
         const app = new Application({
-            view: document.getElementById("pixi-canvas") as HTMLCanvasElement,
             resolution: window.devicePixelRatio || 1,
             autoDensity: true,
             backgroundColor: 0xebebeb,
@@ -30,6 +29,13 @@ export function EditorRoot() {
             resizeTo: window
         });
 
+        // Create canvas element
+        const canvas = document.createElement('canvas');
+        canvas.id = 'pixi-canvas';
+        ref.current!.appendChild(canvas);
+        
+        // Initialize app with canvas
+        app.view = canvas;
     
         app.view.oncontextmenu = (e) => {
             e.preventDefault();
@@ -46,8 +52,6 @@ export function EditorRoot() {
         main = new Main(viewportSettings);
          
 
-        // Add app to DOM
-        ref.current!.appendChild(app.view);
         // Start the PixiJS app
         app.start();
         app.stage.addChild(main)
@@ -58,5 +62,5 @@ export function EditorRoot() {
         };
     }, []);
 
-    return <div ref={ref} />;
+    return <div ref={ref} style={{ width: '100vw', height: '100vh' }} />;
 }
