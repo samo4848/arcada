@@ -36,10 +36,14 @@ export const useFurnitureStore = create<FurnitureStore>((set) => ({
         set({ loading: true, error: undefined });
         try {
             const response = await getCategoriesRequest();
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            
+            // Type assertion for Fetch API Response
+            const fetchResponse = response as Response;
+            
+            if (!fetchResponse.ok) {
+                throw new Error(`HTTP error! status: ${fetchResponse.status}`);
             }
-            const res: Category[] = await response.json();
+            const res: Category[] = await fetchResponse.json();
             set({ 
                 categories: res,
                 loading: false 
@@ -57,10 +61,14 @@ export const useFurnitureStore = create<FurnitureStore>((set) => ({
         set({ loading: true, error: undefined });
         try {
             const response = await getCategoryInfo(categoryId);
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+            
+            // Type assertion for Fetch API Response
+            const fetchResponse = response as Response;
+            
+            if (!fetchResponse.ok) {
+                throw new Error(`HTTP error! status: ${fetchResponse.status}`);
             }
-            const res: FurnitureData[] = await response.json();
+            const res: FurnitureData[] = await fetchResponse.json();
             set({ 
                 currentFurnitureData: res,
                 loading: false 
