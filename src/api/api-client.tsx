@@ -35,6 +35,17 @@ const mockDoor = { width: 0.8, height: 0.1, imagePath: 'door' };
 
 // --- Sahte Veri Döndüren Fonksiyonlar ---
 
+/**
+ * @deprecated FurnitureStore.tsx tarafından hala kullanılıyor. 
+ * Bunun yerine getCategories kullanın.
+ */
+export async function getCategoriesRequest() {
+    console.log("getCategoriesRequest: Using mock data for backward compatibility.");
+    return Promise.resolve({
+        json: () => Promise.resolve(mockCategories)
+    });
+}
+
 // Kategori verilerini sahte olarak döndürür.
 export async function getCategories() {
     console.log("getCategories: Using mock data.");
