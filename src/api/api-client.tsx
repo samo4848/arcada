@@ -41,6 +41,14 @@ export function getCategoriesRequest() {
     });
 }
 
+// YENİ EKLENEN FONKSİYON
+// Uygulamanın çağırdığı 'getCategories' fonksiyonunu export ediyoruz.
+export function getCategories() {
+    console.log("Using mock data for categories.");
+    return getCategoriesRequest();
+}
+
+
 export function getCategoryInfo(categoryId: string) {
     return new Promise((resolve) => {
         setTimeout(() => {
