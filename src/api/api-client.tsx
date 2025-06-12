@@ -1,6 +1,7 @@
+// Bu dosyanın en üstünde endpoint tanımını tutuyoruz ancak kullanmayacağız.
 export const endpoint = process.env.REACT_APP_SERVICE_URI ? process.env.REACT_APP_SERVICE_URI : 'http://localhost:4133/';
 
-// Mock data for when backend is not available
+// --- Mock (Sahte) Veri Tanımları ---
 const mockCategories = [
     { _id: '1', name: 'Living Room', visible: true },
     { _id: '2', name: 'Bedroom', visible: true },
@@ -8,7 +9,7 @@ const mockCategories = [
     { _id: '4', name: 'Bathroom', visible: true }
 ];
 
-const mockFurniture = {
+const mockFurniture: { [key: string]: any[] } = {
     '1': [
         { _id: '1', name: 'Sofa', width: 2, height: 1, imagePath: 'sofa.svg', category: '1' },
         { _id: '2', name: 'Coffee Table', width: 1, height: 0.6, imagePath: 'table.svg', category: '1' },
@@ -31,38 +32,34 @@ const mockFurniture = {
 const mockWindow = { width: 1, height: 0.1, imagePath: 'window' };
 const mockDoor = { width: 0.8, height: 0.1, imagePath: 'door' };
 
-export function getCategoriesRequest() {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                json: () => Promise.resolve(mockCategories)
-            });
-        }, 100);
+
+// --- Sahte Veri Döndüren Fonksiyonlar ---
+
+// Kategori verilerini sahte olarak döndürür.
+export async function getCategories() {
+    console.log("getCategories: Using mock data.");
+    // Gerçek bir API isteği gibi davranması için Promise yapısı kullanıyoruz.
+    return Promise.resolve({
+        json: () => Promise.resolve(mockCategories)
     });
 }
 
-// YENİ EKLENEN FONKSİYON
-// Uygulamanın çağırdığı 'getCategories' fonksiyonunu export ediyoruz.
-export function getCategories() {
-    console.log("Using mock data for categories.");
-    return getCategoriesRequest();
-}
-
-
-export function getCategoryInfo(categoryId: string) {
-    return new Promise((resolve) => {
-        setTimeout(() => {
-            resolve({
-                json: () => Promise.resolve(mockFurniture[categoryId] || [])
-            });
-        }, 100);
+// Kategoriye ait mobilya verilerini sahte olarak döndürür.
+export async function getCategoryInfo(categoryId: string) {
+    console.log(`getCategoryInfo for ${categoryId}: Using mock data.`);
+    return Promise.resolve({
+        json: () => Promise.resolve(mockFurniture[categoryId] || [])
     });
 }
 
+// Pencere verisini sahte olarak döndürür.
 export async function getWindow() {
-    return [mockWindow];
+    console.log("getWindow: Using mock data.");
+    return Promise.resolve([mockWindow]);
 }
 
+// Kapı verisini sahte olarak döndürür.
 export async function getDoor() {
-    return [mockDoor];
+    console.log("getDoor: Using mock data.");
+    return Promise.resolve([mockDoor]);
 }
