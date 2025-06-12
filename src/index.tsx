@@ -1,3 +1,5 @@
+const cors = require('cors');
+app.use(cors());
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
