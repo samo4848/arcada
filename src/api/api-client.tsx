@@ -36,22 +36,14 @@ const mockDoor = { width: 0.8, height: 0.1, imagePath: 'door' };
 // --- Sahte Veri Döndüren Fonksiyonlar ---
 
 /**
- * Kategori verilerini döndüren ana sahte fonksiyon.
- * FurnitureStore.tsx gibi eski bileşenler tarafından doğrudan kullanılır.
+ * Kategori verilerini döndüren TEK ve ANA sahte fonksiyon.
+ * Artık tüm uygulama bu fonksiyonu kullanmalıdır.
  */
-export async function getCategoriesRequest() {
-    console.log("getCategoriesRequest: Using mock data.");
+export async function getCategories() {
+    console.log("getCategories: Using simplified mock data function.");
     return Promise.resolve({
         json: () => Promise.resolve(mockCategories)
     });
-}
-
-/**
- * Modern, genel kullanım için fonksiyon.
- * Çakışmaları önlemek için doğrudan ana fonksiyonu çağırır.
- */
-export async function getCategories() {
-    return getCategoriesRequest();
 }
 
 // Kategoriye ait mobilya verilerini sahte olarak döndürür.
