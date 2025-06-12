@@ -27,7 +27,6 @@ export class Main extends Viewport {
         super(options);
 
         // 1. Yüklenecek varlıkları Loader'a ekle.
-        // Loader'ın zaten bu varlığı yüklemediğinden emin ol.
         if (!Loader.shared.resources["bkg_pattern"]) {
              Loader.shared.add("bkg_pattern", "./pattern.svg");
         }
@@ -49,7 +48,7 @@ export class Main extends Viewport {
         const texture = Loader.shared.resources["bkg_pattern"].texture as Texture;
         this.bkgPattern = new TilingSprite(texture, this.worldWidth ?? 0, this.worldHeight ?? 0);
         
-        this.center = new Point(this.worldWidth / 2, this.worldHeight / 2)
+        // Alt nesneleri ekle
         this.addChild(this.bkgPattern);
 
         this.floorPlan = FloorPlan.Instance;
@@ -63,11 +62,16 @@ export class Main extends Viewport {
 
         this.pointer = new Pointer();
         this.addChild(this.pointer);
+        
+        // --- DÜZELTME ---
+        // Sahnenin merkezini, TÜM alt nesneler eklendikten SONRA ayarla.
+        this.center = new Point(this.worldWidth / 2, this.worldHeight / 2);
+
+        // Event listener'ları ekle
         this.on("pointerdown", this.checkTools)
         this.on("pointermove", this.updatePreview)
         this.on("pointerup", this.updateEnd)
 
-        // --- DÜZELTME ---
         // Eklentileri, viewport tamamen yapılandırıldıktan SONRA başlat.
         this.drag({ mouseButtons: 'right' })
             .clamp({ direction: 'all' })
