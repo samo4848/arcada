@@ -1,5 +1,5 @@
 import { IViewportOptions, PluginManager, Viewport } from "pixi-viewport";
-import { Application, InteractionEvent, isMobile, Loader, Point, TilingSprite } from "pixi.js";
+import { Application, InteractionEvent, isMobile, Loader, Point, TilingSprite, Texture } from "pixi.js";
 import { FloorPlan } from "./objects/FloorPlan";
 import { TransformLayer } from "./objects/TransformControls/TransformLayer";
 import { useStore } from "../../stores/EditorStore";
@@ -26,10 +26,19 @@ export class Main extends Viewport {
     constructor(options: IViewportOptions) {
         super(options);
 
+        // --- DÜZELTME BAŞLANGICI ---
+        // 1. Yüklenecek varlıkları Loader'a ekle.
+        // Loader'ın zaten bu varlığı yüklemediğinden emin ol.
+        if (!Loader.shared.resources["bkg_pattern"]) {
+             Loader.shared.add("bkg_pattern", "./pattern.svg");
+        }
+        // --- DÜZELTME SONU ---
+
         // connect the events
         Loader.shared.onComplete.once(this.setup, this);
         // Start loading!
         Loader.shared.load();
+
         this.preview = new Preview();
         this.addChild(this.preview.getReference());
         this.cursor = "none";
@@ -39,8 +48,14 @@ export class Main extends Viewport {
         Main.viewportPluginManager = this.plugins;
         this.drag({ mouseButtons: 'right' }).clamp({ direction: 'all' })
             .pinch()
-            .wheel().clampZoom({ minScale: 1.0, maxScale: 6.0 })
-        this.bkgPattern = TilingSprite.from("./pattern.svg", { width: this.worldWidth ?? 0, height: this.worldHeight ?? 0 });
+            .wheel().clampZoom({ minScale: 1.0, maxScale: 6.0 });
+
+        // --- DÜZELTME BAŞLANGICI ---
+        // 2. Yüklenmiş olan varlığı kullanarak TilingSprite oluştur.
+        const texture = Loader.shared.resources["bkg_pattern"].texture as Texture;
+        this.bkgPattern = new TilingSprite(texture, this.worldWidth ?? 0, this.worldHeight ?? 0);
+        // --- DÜZELTME SONU ---
+        
         this.center = new Point(this.worldWidth / 2, this.worldHeight / 2)
         this.addChild(this.bkgPattern);
 
@@ -128,4 +143,4 @@ document.onkeydown = (e) => {
             "icon":DeviceFloppy
         })
     }
-};       
+};
