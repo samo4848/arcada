@@ -1,5 +1,6 @@
 import create from "zustand";
-import { getCategoriesRequest, getCategoryInfo } from "../api/api-client";
+// --- DÜZELTME 1: Doğru fonksiyonu import et ---
+import { getCategories, getCategoryInfo } from "../api/api-client";
 
 export interface Category {
     _id: string;
@@ -35,15 +36,13 @@ export const useFurnitureStore = create<FurnitureStore>((set) => ({
     getCategories: async () => {
         set({ loading: true, error: undefined });
         try {
-            const response = await getCategoriesRequest();
+            // --- DÜZELTME 2: Doğru fonksiyonu çağır ---
+            const response = await getCategories();
             
-            // Type assertion for Fetch API Response
-            const fetchResponse = response as Response;
-            
-            if (!fetchResponse.ok) {
-                throw new Error(`HTTP error! status: ${fetchResponse.status}`);
-            }
-            const res: Category[] = await fetchResponse.json();
+            // --- DÜZELTME 3: Sahte API yanıtını doğru işle ---
+            // Sahte API'mız doğrudan bir JSON nesnesi döndürdüğü için 'ok' kontrolüne gerek yok.
+            const res: Category[] = await response.json();
+
             set({ 
                 categories: res,
                 loading: false 
@@ -62,13 +61,9 @@ export const useFurnitureStore = create<FurnitureStore>((set) => ({
         try {
             const response = await getCategoryInfo(categoryId);
             
-            // Type assertion for Fetch API Response
-            const fetchResponse = response as Response;
-            
-            if (!fetchResponse.ok) {
-                throw new Error(`HTTP error! status: ${fetchResponse.status}`);
-            }
-            const res: FurnitureData[] = await fetchResponse.json();
+            // Sahte API'mız doğrudan bir JSON nesnesi döndürdüğü için 'ok' kontrolüne gerek yok.
+            const res: FurnitureData[] = await response.json();
+
             set({ 
                 currentFurnitureData: res,
                 loading: false 
