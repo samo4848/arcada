@@ -26,13 +26,11 @@ export class Main extends Viewport {
     constructor(options: IViewportOptions) {
         super(options);
 
-        // --- DÜZELTME BAŞLANGICI ---
         // 1. Yüklenecek varlıkları Loader'a ekle.
         // Loader'ın zaten bu varlığı yüklemediğinden emin ol.
         if (!Loader.shared.resources["bkg_pattern"]) {
              Loader.shared.add("bkg_pattern", "./pattern.svg");
         }
-        // --- DÜZELTME SONU ---
 
         // connect the events
         Loader.shared.onComplete.once(this.setup, this);
@@ -46,15 +44,10 @@ export class Main extends Viewport {
 
     private setup() {
         Main.viewportPluginManager = this.plugins;
-        this.drag({ mouseButtons: 'right' }).clamp({ direction: 'all' })
-            .pinch()
-            .wheel().clampZoom({ minScale: 1.0, maxScale: 6.0 });
-
-        // --- DÜZELTME BAŞLANGICI ---
-        // 2. Yüklenmiş olan varlığı kullanarak TilingSprite oluştur.
+        
+        // Yüklenmiş olan varlığı kullanarak TilingSprite oluştur.
         const texture = Loader.shared.resources["bkg_pattern"].texture as Texture;
         this.bkgPattern = new TilingSprite(texture, this.worldWidth ?? 0, this.worldHeight ?? 0);
-        // --- DÜZELTME SONU ---
         
         this.center = new Point(this.worldWidth / 2, this.worldHeight / 2)
         this.addChild(this.bkgPattern);
@@ -74,6 +67,13 @@ export class Main extends Viewport {
         this.on("pointermove", this.updatePreview)
         this.on("pointerup", this.updateEnd)
 
+        // --- DÜZELTME ---
+        // Eklentileri, viewport tamamen yapılandırıldıktan SONRA başlat.
+        this.drag({ mouseButtons: 'right' })
+            .clamp({ direction: 'all' })
+            .pinch()
+            .wheel().clampZoom({ minScale: 1.0, maxScale: 6.0 });
+        // --- DÜZELTME SONU ---
     }
     private updatePreview(ev: InteractionEvent) {
         this.addWallManager.updatePreview(ev);
