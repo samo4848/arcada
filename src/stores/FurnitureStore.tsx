@@ -1,5 +1,4 @@
 import create from "zustand";
-// --- DÜZELTME 1: Doğru fonksiyonu import et ---
 import { getCategories, getCategoryInfo } from "../api/api-client";
 
 export interface Category {
@@ -36,11 +35,7 @@ export const useFurnitureStore = create<FurnitureStore>((set) => ({
     getCategories: async () => {
         set({ loading: true, error: undefined });
         try {
-            // --- DÜZELTME 2: Doğru fonksiyonu çağır ---
             const response = await getCategories();
-            
-            // --- DÜZELTME 3: Sahte API yanıtını doğru işle ---
-            // Sahte API'mız doğrudan bir JSON nesnesi döndürdüğü için 'ok' kontrolüne gerek yok.
             const res: Category[] = await response.json();
 
             set({ 
@@ -60,8 +55,6 @@ export const useFurnitureStore = create<FurnitureStore>((set) => ({
         set({ loading: true, error: undefined });
         try {
             const response = await getCategoryInfo(categoryId);
-            
-            // Sahte API'mız doğrudan bir JSON nesnesi döndürdüğü için 'ok' kontrolüne gerek yok.
             const res: FurnitureData[] = await response.json();
 
             set({ 
